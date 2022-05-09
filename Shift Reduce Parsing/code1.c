@@ -1,67 +1,95 @@
-#include<stdio.h>
-#include<string.h>
-int k=0,z=0,i=0,j=0,c=0;
-char a[16],ac[20],stk[15],act[10];
-void check();
-int main()
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+#include <ctype.h>
+int ret[100];
+static int pos = 0;
+static int sc = 0;
+void nfa(int st, int p, char *s)
 {
-puts("GRAMMAR is E->E+E \n E->E*E \n E->(E) \n E->id");
-puts("enter input string ");
-fgets(a,16,stdin);
-c=strlen(a);
-strcpy(act,"SHIFT->");
-puts("stack \t input \t action");
-for(k=0,i=0; j<c; k++,i++,j++)
-{ if(a[j]=='i' && a[j+1]=='d')
+int i, sp, fs[15], fsc = 0;
+sp = st;
+pos = p;
+sc = st;
+while (*s != '\0')
 {
-printf("check");
-stk[i]=a[j];
-stk[i+1]=a[j+1];
-stk[i+2]='\0';
-a[j]=' ';
-a[j+1]=' ';
-printf("\n$%s\t%s$\t%sid",stk,a,act);
-printf("check-2");
-check();
+if (isalpha(*s))
+{
+ret[pos++] = sp;
+ret[pos++] = *s;
+ret[pos++] = ++sc;
 }
-else
+if (*s == '.')
 {
-stk[i]=a[j];stk[i+1]='\0';
-a[j]=' ';
-printf("\n$%s\t%s$\t%ssymbols",stk,a,act);
-check();
-}}}
-void check()
+sp = sc;
+ret[pos++] = sc;
+ret[pos++] = 238;
+ret[pos++] = ++sc;
+sp = sc;
+}
+if (*s == '|')
 {
-strcpy(ac,"REDUCE TO E");
-for(z=0; z<c; z++)
-if(stk[z]=='i' && stk[z+1]=='d')
+sp = st;
+fs[fsc++] = sc;
+
+}
+if (*s == '*')
 {
-stk[z]='E';
-stk[z+1]='\0';
-printf("\n$%s\t%s$\t%s",stk,a,ac);
-j++;
-} for(z=0; z<c; z++)
-if(stk[z]=='E' && stk[z+1]=='+' && stk[z+2]=='E')
+ret[pos++] = sc;
+ret[pos++] = 238;
+ret[pos++] = sp;
+ret[pos++] = sp;
+ret[pos++] = 238;
+ret[pos++] = sc;
+}
+if (*s == '(')
 {
-stk[z]='E';
-stk[z+1]='\0';
-stk[z+2]='\0';
-printf("\n$%s\t%s$\t%s",stk,a,ac);
-i=i-2;
-} for(z=0; z<c; z++)
-if(stk[z]=='E' && stk[z+1]=='*' && stk[z+2]=='E')
+char ps[50];
+int i = 0, flag = 1;
+s++;
+while (flag != 0)
 {
-stk[z]='E';
-stk[z+1]='\0';
-stk[z+1]='\0';
-printf("\n$%s\t%s$\t%s",stk,a,ac);
-i=i-2;
-} for(z=0; z<c; z++)
-if(stk[z]=='(' && stk[z+1]=='E' && stk[z+2]==')'){
-stk[z]='E';
-stk[z+1]='\0';
-stk[z+1]='\0';
-printf("\n$%s\t%s$\t%s",stk,a,ac);
-i=i-2;
-} }
+ps[i++] = *s;
+if (*s == '(')
+flag++;
+if (*s == ')')
+flag--;
+s++;
+}
+ps[--i] = '\0';
+nfa(sc, pos, ps);
+s--;
+}
+s++;
+}
+sc++;
+for (i = 0; i < fsc; i++)
+{
+ret[pos++] = fs[i];
+ret[pos++] = 238;
+ret[pos++] = sc;
+}
+ret[pos++] = sc - 1;
+ret[pos++] = 238;
+ret[pos++] = sc;
+}
+void main()
+{
+int i;
+char *inp;
+printf("enter the regular expression : ");
+gets(inp);
+nfa(1, 0, inp);
+printf("\n TRANSITION TABLE \n");
+printf("\n| Present State | Input | Next State |\n");
+printf("----------------------------------------------------\n");
+for (i = 0; i < pos; i = i + 3)
+
+{
+printf("| %d | --%c--> | %d |\n", ret[i], ret[i
++ 1], ret[i + 2]);
+printf("----------------------------------------------------\n");
+}
+printf("\n");
+getch();
+}
