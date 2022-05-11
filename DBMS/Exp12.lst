@@ -1,0 +1,176 @@
+SQL> desc employee
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EID                                                NUMBER(38)
+ NAME                                               VARCHAR2(20)
+ SALARY                                             NUMBER(38)
+ DEPT                                               VARCHAR2(100)
+
+SQL> select * from employee;
+
+no rows selected
+
+SQL> insert into employee values (7025, 'ABC', 75000, 'HR');
+
+1 row created.
+
+SQL> insert into employee values (7050, 'DEF', 95000, 'IT');
+
+1 row created.
+
+SQL> insert into employee values (7075, 'GHI', 100000, 'SALES');
+
+1 row created.
+
+SQL> insert into employee values (8000, 'JKL', 125000, 'DALA-ANALYST');
+
+1 row created.
+
+SQL> insert into employee values (8025, 'MNO', 150000, 'DATA-SCIENTIST');
+
+1 row created.
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  declare
+  2  totalr int;
+  3  begin
+  4  update employee set SALARY = SALARY*10 where DEPT='DATA-SCIENTIST';
+  5  if sql%notfound then
+  6  dbms_output.put_line('No record found');
+  7  elsif sql%found then
+  8  totalr:=sql%rowcount;
+  9  dbms_output.put_line(totalr || 'records updated');
+ 10  end if;
+ 11* end;
+SQL> /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from employee;
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      7025 ABC                       75000                                      
+HR                                                                              
+                                                                                
+      7050 DEF                       95000                                      
+IT                                                                              
+                                                                                
+      7075 GHI                      100000                                      
+SALES                                                                           
+                                                                                
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      8000 JKL                      125000                                      
+DALA-ANALYST                                                                    
+                                                                                
+      8025 MNO                     1500000                                      
+DATA-SCIENTIST                                                                  
+                                                                            
+
+SQL> ed
+Wrote file afiedt.buf
+
+  1  declare
+  2  totalr int;
+  3  begin
+  4  update employee set SALARY = SALARY+10 where DEPT like'DATA%';
+  5  if sql%notfound then
+  6  dbms_output.put_line('No record found');
+  7  elsif sql%found then
+  8  totalr:=sql%rowcount;
+  9  dbms_output.put_line(totalr || 'records updated');
+ 10  end if;
+ 11* end;
+SQL> /
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM EMPLOYEE;
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      7025 ABC                       75000                                      
+HR                                                                              
+                                                                                
+      7050 DEF                       95000                                      
+IT                                                                              
+                                                                                
+      7075 GHI                      100000                                      
+SALES                                                                           
+                                                                                
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      8000 JKL                      125000                                      
+DALA-ANALYST                                                                    
+                                                                                
+      8025 MNO                     1500010                                      
+DATA-SCIENTIST                                                                  
+                                                                                
+
+SQL> UPDATE EMPLOYEE SET DEPT='DATA-ANALYST' WHERE EID=8000;
+
+1 row updated.
+
+SQL> ED
+Wrote file afiedt.buf
+
+  1  declare
+  2  totalr int;
+  3  begin
+  4  update employee set SALARY = SALARY+10 where DEPT like'DATA%';
+  5  if sql%notfound then
+  6  dbms_output.put_line('No record found');
+  7  elsif sql%found then
+  8  totalr:=sql%rowcount;
+  9  dbms_output.put_line(totalr || 'records updated');
+ 10  end if;
+ 11* end;
+SQL> /
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from employee;
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      7025 ABC                       75000                                      
+HR                                                                              
+                                                                                
+      7050 DEF                       95000                                      
+IT                                                                              
+                                                                                
+      7075 GHI                      100000                                      
+SALES                                                                           
+                                                                                
+
+       EID NAME                     SALARY                                      
+---------- -------------------- ----------                                      
+DEPT                                                                            
+--------------------------------------------------------------------------------
+      8000 JKL                      125010                                      
+DATA-ANALYST                                                                    
+                                                                                
+      8025 MNO                     1500020                                      
+DATA-SCIENTIST                                                                  
+                                                                                
+
+SQL> drop table employee;
+
+Table dropped.
+
+SQL> spool off

@@ -1,0 +1,47 @@
+create table emp_grade(empno number, grade char(1));
+
+Declare Emp_rec emp%rowtype;
+Cursor c is select * into emp_rec from emp;
+Begin
+Open c;
+If c%ISOPEN then
+Loop
+Fetch c into emp_rec;
+If c%notfound then Exit; Endif;
+If emp_rec.sal <= 1400 then
+Insert into emp_grade values(emp_rec.empno,’C’);
+Elsif emp_rec.sal between 1401 and 2000 then
+Insert into emp_garde values(em_rec.empno,’B’);
+Else
+Insert into emp_garde values(em_rec.empno,’A’);
+Endif
+End loop;
+Else
+Open c;
+Endif;
+End;
+
+
+
+
+/////
+
+DECLARE  
+    CURSOR employee_cur IS  
+      SELECT eid,sal 
+      FROM   emp_sal  
+      FOR UPDATE;  
+    incr_sal NUMBER;  
+BEGIN  
+    FOR employee_rec IN employee_cur LOOP  
+        IF employee_rec.sal < 50000 AND employee_rec.sal> 20000 THEN  
+          incr_sal := .10;  
+        ELSE  
+          incr_sal := 0;  
+        END IF;  
+  
+        UPDATE emp_sal  
+        SET    sal = sal + sal * incr_sal  
+        WHERE  CURRENT OF employee_cur;  
+    END LOOP;  
+END; 

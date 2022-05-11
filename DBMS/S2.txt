@@ -1,0 +1,23 @@
+
+Declare
+a number;
+b number;
+c number;
+Begin
+dbms_output.put_line('Enter a:');
+a:=&a;
+dbms_output.put_line('Enter b:');
+b:=&b;
+dbms_output.put_line('Enter c:');
+c:=&c;
+if (a>b) and (a>c) then
+dbms_output.putline('A is Maximum');
+elsif (b>a) and (b>c) then
+dbms_output.putline('B is Maximum');
+else
+dbms_output.putline('C is Maximum');
+end if;
+End;
+/
+
+SET SERVEROUTPUT ON
